@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.jiexdrop.sanzera.Sanzera;
 import com.jiexdrop.sanzera.control.PlayerController;
 
@@ -46,6 +48,7 @@ public class Level {
     private Texture background;
 
     private boolean resetPos;
+    private boolean newWorld;
 
     public Level(Sanzera parent, World world, TextureAtlas atlas, PlayerController playerController) {
         this.parent = parent;
@@ -131,6 +134,11 @@ public class Level {
             player.body.setTransform(new Vector2(0,10),0);
         }
 
+        if(newWorld){
+            newWorld = false;
+            load();
+        }
+
 
         doPhysicsStep(delta);
 
@@ -195,9 +203,10 @@ public class Level {
 
     public void createPlayer() {
 
-        player = new PlayableEntity(playerController, Type.TOCH_LIT,  atlas.findRegion(Type.TOCH_LIT.name), new Vector2(0,10), new Vector2(2, 2));
+        player = new PlayableEntity(playerController, Type.TOCH_LIT, atlas.findRegion(Type.TOCH_LIT.name), new Vector2(0, 10), new Vector2(2, 2));
         player.setBody(world.createBody(player.bodyDef));
         entities.add(player);
+
     }
 
 
@@ -226,10 +235,21 @@ public class Level {
 
     public void load(){
         entities.clear();
+        //clear world
+
+        Array<Body> bodies = new Array<Body>();
+        world.getBodies(bodies);
+        for(int i = 0; i < bodies.size; i++)
+        {
+            if(!world.isLocked())
+                world.destroyBody(bodies.get(i));
+        }
+
+        name = parent.prefs.getString(Sanzera.ACTUAL_LEVEL);
         FileHandle fl = Gdx.files.internal(name + Sanzera.DAT_FILE_SAVE);
         ObjectInputStream in;
         try {
-            System.out.println("GELLLEI: " + name + Sanzera.DAT_FILE_SAVE + " zdz " + fl.exists());
+            System.out.println("Loaded " + name + Sanzera.DAT_FILE_SAVE + " e - " + fl.exists());
             if(fl.exists()) {
                 in = new ObjectInputStream(fl.read());
                 ArrayList<Entity> recoverEntities = (ArrayList<Entity>) in.readObject();
@@ -262,7 +282,6 @@ public class Level {
 
 
     public class ListenerClass implements ContactListener {
-        boolean once = false;
         @Override
         public void endContact(Contact contact) {
 
@@ -285,9 +304,9 @@ public class Level {
                     if (e.fixture.equals(contact.getFixtureA())) {
                         if(e.type.equals(Type.FLAG_BLUE)) {
 
-                            if(!once) {
+                            if(!newWorld) {
                                 parent.nextLevel();
-                                once = true;
+                                newWorld = true;
                             }
                             return;
 

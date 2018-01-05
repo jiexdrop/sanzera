@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.jiexdrop.sanzera.Sanzera;
+import com.jiexdrop.sanzera.entity.Type;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -41,7 +42,7 @@ public class MenuScreen implements Screen {
         parent.manager.finishLoading();
         skin = parent.manager.get(Sanzera.SKIN);
         atlas = parent.manager.get(Sanzera.ATLAS);
-        background = atlas.findRegion("grassCenter");
+        background = atlas.findRegion(Type.WATER.name);
 
     }
 

@@ -159,6 +159,5 @@ public class Sanzera extends Game {
 		if(i<levels.size())
         prefs.putString(Sanzera.ACTUAL_LEVEL, levels.get(i));
         prefs.flush();
-		changeScreen(Sanzera.APPLICATION);
 	}
 }

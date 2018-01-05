@@ -56,13 +56,17 @@ public class GameScreen implements Screen
 
         world = new World(new Vector2(0, -9.81f), true);
 
+        left = new TextButton("Left", skin);
+        right = new TextButton("Right", skin);
+        jump = new TextButton("Jump", skin);
+
+        Gdx.input.setInputProcessor(stage);
+        controller = new PlayerController(left, right, jump);
+        level = new Level(parent, world, atlas, controller);
     }
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(stage);
-        stage.clear();
-
 
 
 
@@ -106,17 +110,12 @@ public class GameScreen implements Screen
         Table table = new Table();
         table.setFillParent(true);
 
-        left = new TextButton("Left", skin);
-        right = new TextButton("Right", skin);
-        jump = new TextButton("Jump", skin);
-
 
         item = new Image(atlas.findRegion(Type.GRASS.name));
 
         int row_height = Gdx.graphics.getWidth() / 12;
         int col_width = Gdx.graphics.getWidth() / 12;
-
-
+        
 
         table.top().add(item).row();
 
@@ -127,13 +126,6 @@ public class GameScreen implements Screen
 
 
         stage.addActor(table);
-
-
-        controller = new PlayerController(left, right, jump);
-
-        world = new World(new Vector2(0, -9.81f), true);
-
-        level = new Level(parent, world, atlas, controller);
 
     }
 

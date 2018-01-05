@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.jiexdrop.sanzera.Sanzera;
+import com.jiexdrop.sanzera.entity.Type;
 
 /**
  * Created by jiexdrop on 26/12/17.
@@ -47,7 +48,7 @@ public class LoadingScreen implements Screen{
 
         atlas = parent.manager.get(Sanzera.ATLAS, TextureAtlas.class);
         title = atlas.findRegion("lock_yellow");
-        background = atlas.findRegion("bg");
+        background = atlas.findRegion(Type.WATER.name);
 
     }
 

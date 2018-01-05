@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.jiexdrop.sanzera.Sanzera;
+import com.jiexdrop.sanzera.entity.Type;
 
 /**
  * Created by jiexdrop on 26/12/17.
@@ -37,7 +38,7 @@ public class PreferencesScreen implements Screen {
 
         atlas = parent.manager.get(Sanzera.ATLAS);
         skin = parent.manager.get(Sanzera.SKIN);
-        background = atlas.findRegion("grassCenter");
+        background = atlas.findRegion(Type.WATER.name);
         table.setBackground(new TiledDrawable(background));
         stage.addActor(table);
         TextButton back = new TextButton("back", skin);
